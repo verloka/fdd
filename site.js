@@ -28,21 +28,32 @@ function updateNavigation() {
 window.addEventListener('scroll', updateNavigation, { passive: true });
 updateNavigation();
 document.querySelectorAll('.copy-button').forEach(button => {
+  const ukrainian = document.documentElement.lang === 'uk';
+  const messages = ukrainian
+    ? { copy: 'Копіювати', copied: 'Скопійовано', select: 'Виділіть текст', success: 'Текст скопійовано до буфера обміну.', fallback: 'Текст виділено. Скопіюйте його вручну.' }
+    : { copy: 'Copy', copied: 'Copied', select: 'Select text', success: 'Text copied to the clipboard.', fallback: 'Text selected. Copy it manually.' };
   button.addEventListener('click', async () => {
     const code = button.closest('.code-block').querySelector('code').textContent;
     try {
       await navigator.clipboard.writeText(code);
-      button.textContent = 'Скопировано';
-      document.querySelector('#copy-status').textContent = 'Текст скопирован в буфер обмена.';
+      button.textContent = messages.copied;
+      document.querySelector('#copy-status').textContent = messages.success;
     } catch {
-      button.textContent = 'Выделите текст';
+      button.textContent = messages.select;
       const selection = window.getSelection();
       const range = document.createRange();
       range.selectNodeContents(button.closest('.code-block').querySelector('code'));
       selection.removeAllRanges();
       selection.addRange(range);
-      document.querySelector('#copy-status').textContent = 'Текст выделен. Скопируйте его вручную.';
+      document.querySelector('#copy-status').textContent = messages.fallback;
     }
-    setTimeout(() => { button.textContent = 'Копировать'; }, 2500);
+    setTimeout(() => { button.textContent = messages.copy; }, 2500);
   });
+});
+// Keep the reader in the same section when switching languages.
+document.querySelectorAll('.language-switch a').forEach(link => {
+  const path = link.getAttribute('href');
+  function updateLanguageLink() { link.setAttribute('href', path + window.location.hash); }
+  window.addEventListener('hashchange', updateLanguageLink);
+  updateLanguageLink();
 });
