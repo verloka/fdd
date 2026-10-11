@@ -1,5 +1,36 @@
 const menu = document.querySelector('.menu-toggle');
 const navigation = document.querySelector('#navigation');
+const themeButton = document.querySelector('.theme-toggle');
+const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+let savedTheme;
+try { savedTheme = localStorage.getItem('fdd-theme'); } catch { /* Use system preference. */ }
+let hasThemePreference = savedTheme === 'light' || savedTheme === 'dark';
+function applyTheme(theme) {
+  const dark = theme === 'dark';
+  document.documentElement.dataset.theme = theme;
+  themeButton.setAttribute('aria-pressed', String(dark));
+  const label = document.documentElement.lang === 'uk'
+    ? (dark ? 'Увімкнути світлу тему' : 'Увімкнути темну тему')
+    : (dark ? 'Switch to light theme' : 'Switch to dark theme');
+  themeButton.setAttribute('aria-label', label);
+  themeButton.title = label;
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1c1e1b' : '#f5f3ed';
+}
+applyTheme(document.documentElement.dataset.theme);
+themeButton.addEventListener('click', () => {
+  const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  hasThemePreference = true;
+  applyTheme(theme);
+  try { localStorage.setItem('fdd-theme', theme); } catch { /* The toggle still works without storage. */ }
+});
+systemTheme.addEventListener('change', event => {
+  if (!hasThemePreference) applyTheme(event.matches ? 'dark' : 'light');
+});
+window.addEventListener('storage', event => {
+  if (event.key !== 'fdd-theme') return;
+  hasThemePreference = event.newValue === 'light' || event.newValue === 'dark';
+  applyTheme(hasThemePreference ? event.newValue : (systemTheme.matches ? 'dark' : 'light'));
+});
 menu.addEventListener('click', () => {
   const open = menu.getAttribute('aria-expanded') !== 'true';
   menu.setAttribute('aria-expanded', String(open));

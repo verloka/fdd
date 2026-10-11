@@ -10,6 +10,7 @@
   <link rel="alternate" hreflang="uk" href="uk.html">
   <link rel="alternate" hreflang="x-default" href="index.html">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <script src="theme.js"></script>
   <link rel="stylesheet" href="site.css">
   <script src="site.js" defer></script>
 </head>
@@ -18,7 +19,11 @@
   <header class="header">
     <a class="brand" href="#" aria-label="FDD, back to top">fdd<span class="brand-dot">.</span></a>
     <span class="header-caption">Flow Driven Development</span>
-    <div class="language-switch" aria-label="Language"><a href="index.html" lang="en" hreflang="en" aria-current="page">EN</a><span aria-hidden="true">/</span><a href="uk.html" lang="uk" hreflang="uk">УКР</a></div>
+    <nav class="language-switch" aria-label="Choose language"><a href="index.html" lang="en" hreflang="en" aria-current="page">English</a><a href="uk.html" lang="uk" hreflang="uk">Українська</a></nav>
+    <button class="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch to dark theme" aria-pressed="false">
+      <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/></svg>
+      <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+    </button>
     <a class="repo-link" href="https://github.com/verloka/fdd">GitHub <span class="external-arrow" aria-hidden="true"></span></a>
   </header>
   <div class="layout">
@@ -32,7 +37,7 @@
         <a href="#contract"><span>05</span> Flow contract</a>
         <a href="#principles"><span>06</span> Principles</a>
       </nav>
-      <div class="sidebar-note">Less ceremony.<br>More clarity in code.<span>Markdown · Claude Code · Codex</span></div>
+      <div class="sidebar-note">Less ceremony.<br>More clarity in code.</div>
     </aside>
     <main id="content">
       <section id="overview" class="hero">
