@@ -15,7 +15,7 @@
   <header class="header">
     <a class="brand" href="#" aria-label="FDD, начало страницы">fdd<span class="brand-dot">.</span></a>
     <span class="header-caption">Flow Driven Development</span>
-    <a class="repo-link" href="https://github.com/verloka/fdd">GitHub <span aria-hidden="true">↗</span></a>
+    <a class="repo-link" href="https://github.com/verloka/fdd">GitHub <span class="external-arrow" aria-hidden="true"></span></a>
   </header>
   <div class="layout">
     <aside class="sidebar" aria-label="Навигация по документации">
@@ -78,7 +78,7 @@
       <section id="contract" class="doc-section">
         <div class="section-label">05 / Формат</div><h2>Контракт, который можно прочитать</h2><p>Один Markdown-файл на бизнес-результат. Начните с <a href="templates/flows/_template.md">полного шаблона</a>; ниже — сокращённый пример, а не одобренный контракт.</p>
         <div class="contract-example"><div class="contract-top"><span>docs/flows/booking-create.md</span><span class="status">Draft</span></div><h3>Создание бронирования</h3><dl><dt>Триггер → результат</dt><dd>Клиент отправляет форму → подтверждённая бронь или явный отказ.</dd><dt>Основной путь</dt><dd>Проверить организацию и услугу, подобрать сотрудника, проверить доступность, создать бронь и инициировать уведомление.</dd><dt>Инвариант</dt><dd>У сотрудника не может быть пересекающихся подтверждённых бронирований.</dd><dt>Отказ</dt><dd>Если время занято, отклонить запрос без создания брони.</dd><dt>Сценарий</dt><dd>Given свободное время, When клиент отправляет валидные данные, Then создаётся бронь. <code>[untested]</code></dd><dt>Неизвестное</dt><dd>Границы транзакции, повторы и поведение при ошибке уведомления требуют проверки.</dd></dl></div>
-        <p>Добавляйте входные и выходные данные, валидации, побочные эффекты, зависимости и ссылки на реализацию. Полный пример: <a href="examples/booking-create.md">Create Booking ↗</a>.</p>
+        <p>Добавляйте входные и выходные данные, валидации, побочные эффекты, зависимости и ссылки на реализацию. Полный пример: <a href="examples/booking-create.md">Create Booking</a>.</p>
       </section>
       <section id="principles" class="doc-section last-section">
         <div class="section-label">06 / Ориентиры</div><h2>Что держит всё вместе</h2>
@@ -86,7 +86,7 @@
         <div class="principle"><span>02</span><div><h3>Контракт меняется осознанно</h3><p>Не переписывайте Active-документ, чтобы оправдать баг. Меняйте только согласованное поведение.</p></div></div>
         <div class="principle"><span>03</span><div><h3>Пробелы остаются видимыми</h3><p>Неизученные входные точки, неизвестные условия и сценарии без тестов не скрываются за словом «готово».</p></div></div>
         <div class="principle"><span>04</span><div><h3>Процесс остаётся лёгким</h3><p>Для изменений, не влияющих на бизнес-поведение, FDD-анализ не нужен. Отдельный валидатор или BDD-фреймворк не требуется.</p></div></div>
-        <a class="text-link" href="https://github.com/verloka/fdd">Открыть исходники и шаблоны <span aria-hidden="true">↗</span></a>
+        <a class="text-link" href="https://github.com/verloka/fdd">Открыть исходники и шаблоны <span class="external-arrow" aria-hidden="true"></span></a>
       </section>
       <footer><span>fdd. <span class="footer-caption">Flow Driven Development</span></span><a href="LICENSE">Apache 2.0</a><a href="#overview">Наверх ↑</a></footer>
     </main>
