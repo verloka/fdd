@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Flow Driven Development: практическое руководство по бизнес-потокам, контрактам и работе с Claude Code и OpenAI Codex.">
+  <meta name="theme-color" content="#f5f3ed">
+  <title>FDD — сначала поток, потом код</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="site.css">
+  <script src="site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#content">К содержанию</a>
+  <header class="header">
+    <a class="brand" href="#" aria-label="FDD, начало страницы">fdd<span class="brand-dot">.</span></a>
+    <span class="header-caption">Flow Driven Development</span>
+    <a class="repo-link" href="https://github.com/verloka/fdd">GitHub <span aria-hidden="true">↗</span></a>
+  </header>
+  <div class="layout">
+    <aside class="sidebar" aria-label="Навигация по документации">
+      <div class="sidebar-top"><span class="eyebrow">Руководство</span><button class="menu-toggle" aria-expanded="false" aria-controls="navigation">Разделы <span aria-hidden="true">+</span></button></div>
+      <nav id="navigation">
+        <a href="#overview" class="active"><span>01</span> Идея</a>
+        <a href="#install"><span>02</span> Установка</a>
+        <a href="#bootstrap"><span>03</span> Первый поток</a>
+        <a href="#everyday"><span>04</span> Ежедневная работа</a>
+        <a href="#contract"><span>05</span> Контракт потока</a>
+        <a href="#principles"><span>06</span> Правила</a>
+      </nav>
+      <div class="sidebar-note">Меньше церемоний.<br>Больше ясности в коде.<span>Markdown · Claude Code · Codex</span></div>
+    </aside>
+    <main id="content">
+      <section id="overview" class="hero">
+        <div class="eyebrow"><span class="small-square"></span> Документация / FDD</div>
+        <h1>Сначала поток.<br><em>Потом код.</em></h1>
+        <p class="lead">Описывайте то, что должно произойти с точки зрения бизнеса. Сохраняйте этот смысл, когда меняете код вместе с AI-агентом.</p>
+        <a class="primary-link" href="#install">Начать работу <span aria-hidden="true">↓</span></a>
+        <div class="flow-strip" aria-label="Пример бизнес-потока"><span><small>Триггер</small>Заявка клиента</span><b aria-hidden="true">→</b><span><small>Решение</small>Проверка условий</span><b aria-hidden="true">→</b><span><small>Результат</small>Бронь подтверждена</span></div>
+        <div class="intro-grid"><h2>Один результат.<br>Весь путь к нему.</h2><div><p>Поток — не отдельный endpoint или класс. Это путь от действия пользователя, события или фоновой задачи до наблюдаемого результата: с проверками, ошибками, побочными эффектами и асинхронными продолжениями.</p><p>Он может проходить через UI, API, базу данных и очередь. Контракт связывает эти части, чтобы локальное изменение не потеряло общий смысл.</p></div></div>
+      </section>
+      <section id="install" class="doc-section">
+        <div class="section-label">02 / Подготовка</div><h2>Установка без лишнего стека</h2>
+        <p>FDD — это шаблоны и три навыка для агента. Python, MCP-сервер и отдельный фреймворк не нужны. Скачайте <a href="https://github.com/verloka/fdd/archive/refs/heads/master.zip">архив репозитория</a> и распакуйте его.</p>
+        <h3>Через PowerShell</h3><p>В Windows откройте PowerShell 5.1+ или 7+ в папке набора и укажите ваш проект:</p>
+        <div class="code-block"><div class="code-heading"><span>PowerShell</span><button class="copy-button" aria-label="Копировать команду установки">Копировать</button></div><pre><code>.\install.ps1 -Project 'C:\Projects\MyProject' -Agent Both</code></pre></div>
+        <p>Используйте <code>-Agent Codex</code> или <code>-Agent Claude</code> для одного инструмента. Добавьте <code>-DryRun</code>, чтобы сначала увидеть список изменений.</p>
+        <div class="note"><strong>Ваши файлы сохраняются.</strong> Установщик сохраняет существующие инструкции и документы потоков, а при конфликте с изменёнными навыками отменяет установку.</div>
+        <h3>Вручную, на любой платформе</h3>
+        <ol class="steps"><li>Скопируйте <code>templates/flows/index.md</code> и <code>_template.md</code> в <code>docs/flows/</code>. Существующие файлы не заменяйте.</li><li>Скопируйте <code>skills/&lt;name&gt;/SKILL.md</code> для каждого из трёх навыков в <code>.agents/skills/&lt;name&gt;/</code> для Codex и/или <code>.claude/skills/&lt;name&gt;/</code> для Claude Code.</li><li>Добавьте содержимое <code>templates/policies/AGENTS.block.md</code> в <code>AGENTS.md</code>, а для Claude — <code>CLAUDE.block.md</code> в <code>CLAUDE.md</code>. Сохраните прежние инструкции.</li></ol>
+        <details><summary>Что появится в проекте</summary><pre class="file-tree"><code>project/
+├── AGENTS.md / CLAUDE.md
+├── docs/flows/
+│   ├── index.md
+│   └── _template.md
+├── .agents/skills/       # Codex
+└── .claude/skills/       # Claude Code</code></pre><p>Документы в <code>docs/flows/</code> общие для обоих инструментов.</p></details>
+      </section>
+      <section id="bootstrap" class="doc-section">
+        <div class="section-label">03 / Первый запуск</div><h2>Начните с того, что уже работает</h2>
+        <p>В существующем проекте вызовите <code>$flow-bootstrap</code> в Codex или <code>/flow-bootstrap</code> в Claude Code. Затем задайте небольшой связанный участок системы:</p>
+        <div class="code-block"><div class="code-heading"><span>Запрос агенту</span><button class="copy-button" aria-label="Копировать запрос для bootstrap">Копировать</button></div><pre class="prompt"><code>Найди сквозные бизнес-потоки в этом репозитории.
+Составь инвентарь пользовательских и фоновых входных точек
+в docs/flows/index.md. Проследи первые 3–5 связанных потоков,
+запиши доказательства и пробелы в покрытии.
+Оставь новые документы в статусе Draft. Код не меняй.
+Продолжай следующими порциями из индекса.</code></pre></div>
+        <p>Агент изучит код и тесты, свяжет входные точки с результатами и отметит неизвестное. Частичный обзор должен явно указывать, что ещё не изучено.</p>
+        <div class="status-list"><div><span class="status">Discovered</span><p>Кандидат найден, но путь ещё не прослежен.</p></div><div><span class="status">Draft</span><p>Поток описан по коду. Требует проверки человеком.</p></div><div><span class="status status-active">Active</span><p>Человек одобрил контракт. Его требования нужно сохранять.</p></div></div>
+        <div class="note"><strong>Одобрение — за вами.</strong> Агент не переводит Draft в Active самостоятельно. Наблюдаемое поведение кода ещё не доказывает, что оно правильное.</div>
+      </section>
+      <section id="everyday" class="doc-section">
+        <div class="section-label">04 / В работе</div><h2>Обычный запрос. Явные последствия.</h2>
+        <p>После установки описывайте изменения привычным способом. Инструкции проекта направят агента к нужному навыку; вызывать команды каждый раз необязательно.</p>
+        <div class="table-wrap"><table><caption class="sr-only">Навыки FDD и команды агентов</caption><thead><tr><th>Задача</th><th>Codex</th><th>Claude Code</th></tr></thead><tbody><tr><td>Найти потоки</td><td><code>$flow-bootstrap</code></td><td><code>/flow-bootstrap</code></td></tr><tr><td>Изменить поведение</td><td><code>$flow-develop</code></td><td><code>/flow-develop</code></td></tr><tr><td>Проверить регрессии</td><td><code>$flow-verify</code></td><td><code>/flow-verify</code></td></tr></tbody></table></div>
+        <h3>Например: добавить отмену бронирования</h3><ol class="steps"><li>Найдите затронутый поток и зависимые потоки: доступность, уведомления, оплату.</li><li>До кода уточните только требования, которые намеренно меняются. Сохраните остальные условия Active-контрактов.</li><li>Измените реализацию и запустите релевантные тесты. Проверьте обратные зависимости и побочные эффекты.</li><li>Свяжите сценарии с реальными тестами. Если теста нет, явно оставьте <code>[untested]</code>.</li></ol>
+      </section>
+      <section id="contract" class="doc-section">
+        <div class="section-label">05 / Формат</div><h2>Контракт, который можно прочитать</h2><p>Один Markdown-файл на бизнес-результат. Начните с <a href="templates/flows/_template.md">полного шаблона</a>; ниже — сокращённый пример, а не одобренный контракт.</p>
+        <div class="contract-example"><div class="contract-top"><span>docs/flows/booking-create.md</span><span class="status">Draft</span></div><h3>Создание бронирования</h3><dl><dt>Триггер → результат</dt><dd>Клиент отправляет форму → подтверждённая бронь или явный отказ.</dd><dt>Основной путь</dt><dd>Проверить организацию и услугу, подобрать сотрудника, проверить доступность, создать бронь и инициировать уведомление.</dd><dt>Инвариант</dt><dd>У сотрудника не может быть пересекающихся подтверждённых бронирований.</dd><dt>Отказ</dt><dd>Если время занято, отклонить запрос без создания брони.</dd><dt>Сценарий</dt><dd>Given свободное время, When клиент отправляет валидные данные, Then создаётся бронь. <code>[untested]</code></dd><dt>Неизвестное</dt><dd>Границы транзакции, повторы и поведение при ошибке уведомления требуют проверки.</dd></dl></div>
+        <p>Добавляйте входные и выходные данные, валидации, побочные эффекты, зависимости и ссылки на реализацию. Полный пример: <a href="examples/booking-create.md">Create Booking ↗</a>.</p>
+      </section>
+      <section id="principles" class="doc-section last-section">
+        <div class="section-label">06 / Ориентиры</div><h2>Что держит всё вместе</h2>
+        <div class="principle"><span>01</span><div><h3>Бизнес-результат задаёт границы</h3><p>Документ объединяет весь путь, даже если он проходит через несколько сервисов.</p></div></div>
+        <div class="principle"><span>02</span><div><h3>Контракт меняется осознанно</h3><p>Не переписывайте Active-документ, чтобы оправдать баг. Меняйте только согласованное поведение.</p></div></div>
+        <div class="principle"><span>03</span><div><h3>Пробелы остаются видимыми</h3><p>Неизученные входные точки, неизвестные условия и сценарии без тестов не скрываются за словом «готово».</p></div></div>
+        <div class="principle"><span>04</span><div><h3>Процесс остаётся лёгким</h3><p>Для изменений, не влияющих на бизнес-поведение, FDD-анализ не нужен. Отдельный валидатор или BDD-фреймворк не требуется.</p></div></div>
+        <a class="text-link" href="https://github.com/verloka/fdd">Открыть исходники и шаблоны <span aria-hidden="true">↗</span></a>
+      </section>
+      <footer><span>fdd. <span class="footer-caption">Flow Driven Development</span></span><a href="LICENSE">Apache 2.0</a><a href="#overview">Наверх ↑</a></footer>
+    </main>
+  </div>
+  <div id="copy-status" class="sr-only" role="status" aria-live="polite"></div>
+</body>
+</html>
